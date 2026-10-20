@@ -161,9 +161,8 @@ StatusOr<int32_t> HorizontalCompactionTask::calculate_chunk_size() {
     int64_t total_mem_footprint = 0;
     for (auto& rowset : _input_rowsets) {
         total_num_rows += rowset->num_rows();
-        LakeIOOptions lake_io_opts{.fill_data_cache = false,
-                                   .buffer_size = _stream_buffer_size,
-                                   .fill_metadata_cache = false};
+        LakeIOOptions lake_io_opts{
+                .fill_data_cache = false, .buffer_size = _stream_buffer_size, .fill_metadata_cache = false};
         ASSIGN_OR_RETURN(auto segments, rowset->segments(lake_io_opts));
         for (auto& segment : segments) {
             for (size_t i = 0; i < segment->num_columns(); ++i) {
